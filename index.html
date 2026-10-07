@@ -2,10 +2,12 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HSE DSBA — Лекции</title>
 <meta name="description" content="Лекции и семинары HSE DSBA, 1 курс">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23111'/><text x='16' y='22' font-family='monospace' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'>DS</text></svg>">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%230a84ff'/><stop offset='1' stop-color='%23bf5af2'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><text x='16' y='21.5' font-family='-apple-system,Helvetica' font-size='14' font-weight='700' fill='%23fff' text-anchor='middle'>DS</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -14,169 +16,327 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
 <style>
 :root{
-  --bg:#f6f5f2; --panel:#ffffff; --fg:#1b1a18; --muted:#6f6b65; --faint:#a29d95;
-  --line:#e4e0d9; --hover:#efede8; --active:#1b1a18; --active-fg:#ffffff;
-  --accent:#c2410c; --accent-soft:#fbeee6; --code:#f3f1ed;
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05);
+  --bg:#f5f5f7; --card:#ffffff; --fg:#1d1d1f; --fg2:#6e6e73; --fg3:#86868b;
+  --sep:rgba(0,0,0,.08); --fill:rgba(118,118,128,.12); --fill2:rgba(118,118,128,.08);
+  --blue:#0071e3; --link:#0066cc;
+  --glass:rgba(251,251,253,.72); --glass-line:rgba(0,0,0,.07);
+  --shadow:0 2px 6px rgba(0,0,0,.03),0 12px 32px rgba(0,0,0,.06);
+  --shadow-hi:0 4px 12px rgba(0,0,0,.05),0 22px 48px rgba(0,0,0,.10);
+  --tile-dark:#1d1d1f; --tile-dark-fg:#f5f5f7; --thumb:#ffffff;
+  --code:#f5f5f7;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Inter,system-ui,sans-serif;
+  --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f0f10; --panel:#161617; --fg:#ecebe8; --muted:#9a968f; --faint:#66625c;
-    --line:#26262a; --hover:#1e1e21; --active:#ecebe8; --active-fg:#111;
-    --accent:#fb923c; --accent-soft:#2a1d14; --code:#1d1d20;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.3);
+    --bg:#000; --card:#1c1c1e; --fg:#f5f5f7; --fg2:#a1a1a6; --fg3:#6e6e73;
+    --sep:rgba(255,255,255,.1); --fill:rgba(118,118,128,.24); --fill2:rgba(118,118,128,.14);
+    --blue:#0a84ff; --link:#2997ff;
+    --glass:rgba(22,22,23,.72); --glass-line:rgba(255,255,255,.08);
+    --shadow:none; --shadow-hi:0 0 0 1px rgba(255,255,255,.06);
+    --tile-dark:#1c1c1e; --thumb:#636366; --code:#2c2c2e;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f0f10; --panel:#161617; --fg:#ecebe8; --muted:#9a968f; --faint:#66625c;
-  --line:#26262a; --hover:#1e1e21; --active:#ecebe8; --active-fg:#111;
-  --accent:#fb923c; --accent-soft:#2a1d14; --code:#1d1d20;
+  --bg:#000; --card:#1c1c1e; --fg:#f5f5f7; --fg2:#a1a1a6; --fg3:#6e6e73;
+  --sep:rgba(255,255,255,.1); --fill:rgba(118,118,128,.24); --fill2:rgba(118,118,128,.14);
+  --blue:#0a84ff; --link:#2997ff;
+  --glass:rgba(22,22,23,.72); --glass-line:rgba(255,255,255,.08);
+  --shadow:none; --shadow-hi:0 0 0 1px rgba(255,255,255,.06);
+  --tile-dark:#1c1c1e; --thumb:#636366; --code:#2c2c2e;
 }
-*{box-sizing:border-box}
-html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--fg);font:14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
-button{font:inherit;color:inherit;cursor:pointer}
-a{color:inherit}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.47 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;letter-spacing:inherit}
+a{color:var(--link);text-decoration:none}
+svg{flex:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.glass{background:var(--glass);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
 
-.app{display:grid;grid-template-columns:300px 1fr;height:100dvh}
+/* ---------- global nav ---------- */
+.gnav{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--glass-line)}
+.gnav .wrap{height:48px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:var(--fg);letter-spacing:-.01em}
+.logo i{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#0a84ff,#bf5af2);display:grid;place-items:center;color:#fff;font:700 9.5px/1 var(--font);font-style:normal}
+.gnav nav{display:flex;gap:22px;margin-left:auto;font-size:12.5px}
+.gnav nav button{border:0;background:none;color:var(--fg2);padding:0;letter-spacing:-.01em}
+.gnav nav button:hover,.gnav nav button.on{color:var(--fg)}
+.round{width:30px;height:30px;border-radius:50%;border:0;background:none;color:var(--fg2);display:grid;place-items:center}
+.round:hover{background:var(--fill2);color:var(--fg)}
 
-/* ---------- sidebar ---------- */
-.side{display:flex;flex-direction:column;border-right:1px solid var(--line);background:var(--panel);min-height:0}
-.brand{padding:20px 20px 14px;display:flex;align-items:center;gap:10px}
-.logo{width:30px;height:30px;border-radius:8px;background:var(--active);color:var(--active-fg);display:grid;place-items:center;font:700 12px/1 "JetBrains Mono",monospace}
-.brand b{display:block;font-size:15px;letter-spacing:-.01em}
-.brand small{color:var(--muted);font-size:12px}
-.tabs{margin:0 16px 12px;display:grid;grid-template-columns:1fr 1fr;background:var(--hover);border-radius:10px;padding:3px}
-.tabs button{border:0;background:none;padding:7px 0;border-radius:8px;font-weight:500;color:var(--muted);display:flex;gap:6px;justify-content:center;align-items:center}
-.tabs button.on{background:var(--panel);color:var(--fg);box-shadow:var(--shadow)}
-.tabs .n{font:500 11px "JetBrains Mono",monospace;color:var(--faint)}
-.search{margin:0 16px 10px;position:relative}
-.search input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:9px;padding:8px 10px 8px 32px;font:inherit;outline:none}
-.search input:focus{border-color:var(--accent)}
-.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--faint)}
-.list{overflow:auto;flex:1;padding:4px 10px 20px}
-.group{margin-top:12px}
-.group h3{margin:0;padding:6px 10px;font:600 11px/1.3 Inter,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;gap:8px}
-.group h3 i{width:8px;height:8px;border-radius:2px;flex:none}
-.item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px}
-.item:hover{background:var(--hover)}
-.item.on{background:var(--active);color:var(--active-fg)}
-.item.on .meta{color:inherit;opacity:.65}
-.item .num{font:500 11px "JetBrains Mono",monospace;color:var(--faint);width:20px;flex:none}
-.item.on .num{color:inherit;opacity:.6}
-.item .t{flex:1;min-width:0}
-.item .t span{display:block;line-height:1.35}
-.item .t .meta{margin-top:2px}
-.item .meta{font-size:11.5px;color:var(--muted)}
-.item .ext{font:500 10px "JetBrains Mono",monospace;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 4px}
-.item.on .ext{border-color:currentColor;color:inherit;opacity:.6}
-.empty{padding:20px 10px;color:var(--muted)}
-.foot{border-top:1px solid var(--line);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;color:var(--faint);font-size:12px}
-.foot kbd{font:500 11px "JetBrains Mono",monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;color:var(--muted)}
-.iconbtn{border:1px solid var(--line);background:var(--panel);border-radius:8px;width:32px;height:32px;display:grid;place-items:center;color:var(--muted);flex:none}
-.iconbtn:hover{color:var(--fg);background:var(--hover)}
-.iconbtn:disabled{opacity:.35;cursor:default}
+/* ---------- hero ---------- */
+.hero{text-align:center;padding:88px 0 56px}
+.eyebrow{font-size:17px;font-weight:600;color:var(--fg2);margin:0 0 10px;letter-spacing:-.02em}
+.hero h1{font-size:clamp(44px,7.4vw,80px);line-height:1.04;letter-spacing:-.045em;font-weight:700;margin:0}
+.grad{background:linear-gradient(90deg,#0a84ff 0%,#5e5ce6 35%,#bf5af2 65%,#ff375f 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:560px;margin:20px auto 0;font-size:21px;line-height:1.38;color:var(--fg2);letter-spacing:-.02em}
+.resume{margin-top:30px;display:inline-flex;align-items:center;gap:10px;border:0;background:var(--blue);color:#fff;border-radius:980px;padding:11px 20px 11px 22px;font-size:17px;max-width:100%}
+.resume:hover{filter:brightness(1.08)}
+.resume span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.resume small{opacity:.75;font-size:15px}
 
-/* ---------- main ---------- */
-.main{display:flex;flex-direction:column;min-width:0;min-height:0}
-.bar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
-.bar .menu{display:none}
-.crumb{flex:1;min-width:0}
-.crumb small{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12px}
-.crumb small i{width:7px;height:7px;border-radius:2px}
-.crumb h1{margin:1px 0 0;font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nav{display:flex;gap:6px;align-items:center}
-.pos{font:500 12px "JetBrains Mono",monospace;color:var(--muted);padding:0 6px}
-.linkbtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--line);border-radius:8px;text-decoration:none;font-weight:500;font-size:13px;background:var(--panel)}
-.linkbtn:hover{background:var(--hover)}
-.stage{flex:1;min-height:0;position:relative;background:var(--bg)}
+/* ---------- chooser tiles ---------- */
+.chooser{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tile{position:relative;overflow:hidden;text-align:left;border:0;border-radius:28px;padding:36px 36px 32px;min-height:300px;display:flex;flex-direction:column;background:var(--card);box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.tile:hover{transform:scale(1.012);box-shadow:var(--shadow-hi)}
+.tile.dark{background:var(--tile-dark);color:var(--tile-dark-fg)}
+.tile .k{font-size:14px;font-weight:600;color:var(--fg2)}
+.tile.dark .k{color:#a1a1a6}
+.tile h2{margin:6px 0 0;font-size:40px;line-height:1.08;letter-spacing:-.035em;font-weight:700}
+.tile .big{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.tile .num{font-size:96px;line-height:.9;font-weight:700;letter-spacing:-.06em;padding-bottom:4px}
+.tile .subj{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:13px;color:var(--fg2);text-align:right}
+.tile.dark .subj{color:#a1a1a6}
+.tile .subj span{display:flex;align-items:center;gap:6px}
+.tile .subj i{width:8px;height:8px;border-radius:50%}
+.tile .go{position:absolute;top:30px;right:30px;width:36px;height:36px;border-radius:50%;background:var(--fill);display:grid;place-items:center;transition:background .2s,transform .3s}
+.tile.dark .go{background:rgba(255,255,255,.14)}
+.tile.on .go{background:var(--blue);color:#fff;transform:rotate(90deg)}
+.tile::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 2.5px var(--blue);opacity:0;transition:opacity .25s;pointer-events:none}
+.tile.on::after{opacity:1}
+.tile .glow{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(80px);opacity:.28;right:-140px;top:-180px;pointer-events:none}
+
+/* ---------- library ---------- */
+.library{padding:72px 0 40px}
+.libhead{margin-bottom:8px}
+.libhead h2{margin:0;font-size:40px;letter-spacing:-.035em;line-height:1.1}
+.libhead p{margin:4px 0 0;color:var(--fg2);font-size:17px}
+.controls{position:sticky;top:48px;z-index:20;padding:12px 22px;margin:0 -22px 18px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid transparent;transition:border-color .2s}
+.controls.stuck{border-bottom-color:var(--glass-line)}
+.controls:not(.stuck){background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--fill);border-radius:10px;padding:2px;position:relative}
+.seg button{position:relative;z-index:1;border:0;background:none;padding:6px 18px;font-size:14px;font-weight:500;border-radius:8px;white-space:nowrap;color:var(--fg)}
+.seg button .c{color:var(--fg3);font-weight:400;margin-left:5px;font-size:13px}
+.seg .thumb{position:absolute;z-index:0;top:2px;bottom:2px;border-radius:8px;background:var(--thumb);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04);transition:left .3s cubic-bezier(.2,.8,.2,1),width .3s}
+.searchbox{position:relative;width:min(280px,100%)}
+.searchbox input{width:100%;border:0;background:var(--fill);color:var(--fg);border-radius:10px;padding:8px 12px 8px 32px;font:15px var(--font);letter-spacing:-.01em;outline:none;-webkit-appearance:none}
+.searchbox input:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 35%,transparent)}
+.searchbox input::placeholder{color:var(--fg3)}
+.searchbox svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--fg3)}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;align-items:start}
+.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card header{display:flex;align-items:center;gap:14px;padding:22px 22px 14px}
+.icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;color:#fff;font:600 24px/1 var(--font);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 4px 10px rgba(0,0,0,.08);flex:none}
+.card header h3{margin:0;font-size:21px;letter-spacing:-.025em;line-height:1.2}
+.card header small{color:var(--fg2);font-size:14px}
+.rows{padding:0 8px 8px}
+.row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;background:none;padding:11px 14px;border-radius:12px;position:relative}
+.row:hover{background:var(--fill2)}
+.row:active{background:var(--fill)}
+.row+.row::before{content:"";position:absolute;top:0;left:56px;right:14px;border-top:1px solid var(--sep)}
+.row:hover::before,.row:hover+.row::before{opacity:0}
+.badge{width:28px;height:28px;border-radius:8px;background:var(--fill2);display:grid;place-items:center;font:600 12px var(--font);color:var(--fg2);flex:none;font-variant-numeric:tabular-nums}
+.rt{flex:1;min-width:0;line-height:1.3}
+.rt b{display:block;font-weight:500;font-size:16px;letter-spacing:-.015em}
+.rt small{display:block;color:var(--fg2);font-size:13px;margin-top:2px}
+.row.pair{cursor:default}
+.row.pair:hover,.row.pair:active{background:none}
+.row.pair:hover::before,.row.pair:hover+.row::before{opacity:1}
+.pills{display:flex;gap:6px;flex:none}
+.mini{border:0;background:var(--fill2);color:var(--link);font-size:13px;font-weight:500;padding:5px 12px;border-radius:980px;letter-spacing:-.01em}
+.mini:hover{background:var(--blue);color:#fff}
+.chip{font:600 10.5px var(--font);letter-spacing:.02em;text-transform:uppercase;color:var(--fg3)}
+.chev{color:var(--fg3);opacity:.7}
+.empty{grid-column:1/-1;text-align:center;color:var(--fg2);padding:60px 0}
+footer{color:var(--fg3);font-size:12px;padding:36px 0 48px;border-top:1px solid var(--sep);margin-top:40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+kbd{font:500 11px var(--mono);border:1px solid var(--sep);border-radius:5px;padding:1px 5px;background:var(--card)}
+
+/* ---------- viewer ---------- */
+.viewer{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-rows:auto 1fr;opacity:0;visibility:hidden;transform:scale(.985);transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1),visibility 0s .35s}
+.viewer.open{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1)}
+body.viewing{overflow:hidden}
+.vbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;height:52px;padding:0 12px;border-bottom:1px solid var(--glass-line);position:relative;z-index:6}
+.vleft,.vright{display:flex;align-items:center;gap:4px;min-width:0}
+.vright{justify-content:flex-end}
+.back{display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:var(--link);font-size:15px;padding:6px 8px 6px 4px;border-radius:8px;white-space:nowrap}
+.back:hover{background:var(--fill2)}
+.vtitle{text-align:center;min-width:0;max-width:52vw}
+.vtitle b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
+.vtitle small{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--fg2);white-space:nowrap}
+.vtitle small i{width:7px;height:7px;border-radius:50%;flex:none}
+.tb{width:32px;height:32px;border:0;background:none;border-radius:8px;display:grid;place-items:center;color:var(--fg2)}
+.tb:hover:not(:disabled){background:var(--fill2);color:var(--fg)}
+.tb:disabled{opacity:.3;cursor:default}
+.tb.on{color:var(--blue)}
+.pos{font:500 12px var(--font);color:var(--fg3);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.vbody{display:grid;grid-template-columns:300px 1fr;min-height:0;transition:grid-template-columns .3s cubic-bezier(.2,.8,.2,1)}
+.viewer.nosb .vbody{grid-template-columns:0 1fr}
+.sb{overflow:auto;border-right:1px solid var(--sep);background:var(--glass);padding:12px 10px 30px;min-width:0}
+.sb .seg{display:grid;margin:0 6px 8px}
+.sb h4{margin:18px 10px 4px;font-size:11px;font-weight:600;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:7px}
+.sb h4 i{width:7px;height:7px;border-radius:50%}
+.sbi{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:8px;font-size:13.5px;line-height:1.3;letter-spacing:-.01em}
+.sbi:hover{background:var(--fill2)}
+.sbi.on{background:var(--blue);color:#fff}
+.sbi.on small{color:rgba(255,255,255,.75)}
+.sbi .t{flex:1;min-width:0}
+.sbi small{display:block;color:var(--fg2);font-size:11.5px}
+.sbi .n{font:500 11px var(--font);color:var(--fg3);width:16px;font-variant-numeric:tabular-nums}
+.sbi.on .n{color:rgba(255,255,255,.7)}
+.stage{position:relative;min-width:0;min-height:0}
 .stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
 .doc{position:absolute;inset:0;overflow:auto}
-.md{max-width:800px;margin:0 auto;padding:40px 28px 80px;font-size:15.5px;line-height:1.7}
-.md h1{font-size:28px;line-height:1.25;letter-spacing:-.02em;margin:0 0 24px}
-.md h2{font-size:21px;margin:40px 0 12px;padding-top:12px;border-top:1px solid var(--line);letter-spacing:-.01em}
-.md h3{font-size:17px;margin:28px 0 8px}
-.md code{font:13.5px "JetBrains Mono",monospace;background:var(--code);padding:.1em .35em;border-radius:4px}
-.md pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto;line-height:1.55}
-.md pre code{background:none;padding:0;font-size:13px}
-.md pre code.hljs{background:none;padding:0}
-.md table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow:auto}
-.md th,.md td{border:1px solid var(--line);padding:6px 10px;text-align:left}
-.md th{background:var(--hover)}
-.md blockquote{margin:16px 0;padding:4px 16px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
-.md img{max-width:100%}
-.md hr{border:0;border-top:1px solid var(--line);margin:32px 0}
-.md .katex-display{overflow-x:auto;overflow-y:hidden}
-.notice{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted)}
-.notice b{display:block;color:var(--fg);font-size:16px;margin-bottom:6px}
-.notice .linkbtn{margin-top:14px;color:var(--fg)}
-.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--faint);font:500 12px "JetBrains Mono",monospace}
+.notice{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--fg2)}
+.notice b{display:block;color:var(--fg);font-size:21px;margin-bottom:6px;letter-spacing:-.02em}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-top:18px;background:var(--blue);color:#fff;border-radius:980px;padding:9px 18px;font-size:15px}
+.spinner{position:absolute;inset:0;display:grid;place-items:center}
+.spinner::before{content:"";width:22px;height:22px;border-radius:50%;border:2.5px solid var(--fill);border-top-color:var(--fg2);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* markdown */
+.md{max-width:760px;margin:0 auto;padding:56px 28px 100px;font-size:17px;line-height:1.6}
+.md h1{font-size:40px;line-height:1.1;letter-spacing:-.035em;margin:0 0 28px}
+.md h2{font-size:28px;letter-spacing:-.03em;margin:52px 0 14px;line-height:1.2}
+.md h3{font-size:21px;letter-spacing:-.02em;margin:32px 0 10px}
+.md code{font:14px var(--mono);background:var(--fill2);padding:.12em .4em;border-radius:6px;letter-spacing:0}
+.md pre{background:var(--code);border-radius:14px;padding:16px 18px;overflow:auto;line-height:1.55;border:1px solid var(--sep)}
+.md pre code,.md pre code.hljs{background:none;padding:0;font-size:13.5px}
+.md table{border-collapse:collapse;width:100%;font-size:15px;display:block;overflow:auto}
+.md th,.md td{border-bottom:1px solid var(--sep);padding:8px 12px;text-align:left}
+.md th{font-weight:600;color:var(--fg2);font-size:13px}
+.md blockquote{margin:20px 0;padding:14px 18px;background:var(--card);border-radius:14px;box-shadow:var(--shadow)}
+.md blockquote p{margin:4px 0}
+.md hr{border:0;border-top:1px solid var(--sep);margin:40px 0}
+.md .katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
 
 .scrim{display:none}
+
 @media (max-width:860px){
-  .app{grid-template-columns:1fr}
-  .side{position:fixed;inset:0 auto 0 0;width:min(320px,88vw);z-index:20;transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
-  .app.open .side{transform:none}
-  .app.open .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10}
-  .bar{padding:10px 12px;gap:8px}
-  .bar .menu{display:grid}
-  .pos,.hide-sm{display:none}
-  .md{padding:28px 16px 60px;font-size:15px}
+  .chooser,.grid{grid-template-columns:1fr}
+  .tile{min-height:220px;padding:28px}
+  .tile .num{font-size:72px}
+  .tile h2{font-size:32px}
+  .hero{padding:64px 0 40px}
+  .hero p{font-size:19px}
+  .library{padding-top:56px}
+  .libhead h2{font-size:32px}
+  .gnav nav{display:none}
+  .gnav .round{margin-left:auto}
+  .controls{flex-direction:column;align-items:stretch}
+  .seg{display:grid}
+  .searchbox{width:100%}
+  .vbody,.viewer.nosb .vbody{grid-template-columns:1fr}
+  .sb{position:fixed;top:52px;bottom:0;left:0;width:min(320px,86vw);z-index:5;transform:translateX(-105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);background:var(--bg)}
+  .viewer.sbm .sb{transform:none;box-shadow:0 0 40px rgba(0,0,0,.25)}
+  .viewer.sbm .scrim{display:block;position:fixed;inset:52px 0 0;background:rgba(0,0,0,.3);z-index:4}
+  .vbar{grid-template-columns:auto 1fr auto;gap:6px;padding:0 6px}
+  .vtitle{max-width:none}
+  .hide-sm{display:none}
+  .back span{display:none}
+  .md{padding:32px 18px 80px;font-size:16px}
+  .md h1{font-size:30px}
 }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="app" id="app">
-  <aside class="side">
-    <div class="brand">
-      <div class="logo">DS</div>
-      <div><b>HSE DSBA · 1 курс</b><small>Лекции и семинары</small></div>
-    </div>
-    <div class="tabs" role="tablist">
-      <button data-kind="lectures" role="tab">Лекции <span class="n" id="n-lectures"></span></button>
-      <button data-kind="seminars" role="tab">Семинары <span class="n" id="n-seminars"></span></button>
-    </div>
-    <label class="search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Поиск по названию…" autocomplete="off">
-    </label>
-    <nav class="list" id="list"></nav>
-    <div class="foot">
-      <span><kbd>←</kbd> <kbd>→</kbd> переключение</span>
-      <button class="iconbtn" id="theme" title="Тема" aria-label="Сменить тему">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      </button>
-    </div>
-  </aside>
-  <div class="scrim" id="scrim"></div>
 
-  <main class="main">
-    <header class="bar">
-      <button class="iconbtn menu" id="menu" aria-label="Меню">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+<header class="gnav glass">
+  <div class="wrap">
+    <a class="logo" href="#"><i>DS</i>HSE DSBA</a>
+    <nav>
+      <button data-go="lectures">Лекции</button>
+      <button data-go="seminars">Семинары</button>
+    </nav>
+    <button class="round" id="theme" aria-label="Сменить тему">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Data Science and Business Analytics · 1 курс</p>
+    <h1>Все лекции.<br><span class="grad">В одном месте.</span></h1>
+    <p id="hero-sub"></p>
+    <div id="resume-slot"></div>
+  </section>
+
+  <section class="chooser" aria-label="Выбор раздела">
+    <button class="tile dark" data-go="lectures">
+      <span class="glow" style="background:#0a84ff"></span>
+      <span class="k">Раздел</span>
+      <h2>Лекции</h2>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg></span>
+      <span class="big"><span class="num grad" id="t-lectures"></span><span class="subj" id="s-lectures"></span></span>
+    </button>
+    <button class="tile" data-go="seminars">
+      <span class="glow" style="background:#ff375f"></span>
+      <span class="k">Раздел</span>
+      <h2>Семинары</h2>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg></span>
+      <span class="big"><span class="num grad" id="t-seminars"></span><span class="subj" id="s-seminars"></span></span>
+    </button>
+  </section>
+
+  <section class="library" id="library">
+    <div class="libhead">
+      <h2 id="lib-title"></h2>
+      <p id="lib-sub"></p>
+    </div>
+    <div class="controls glass" id="controls">
+      <div class="seg" id="seg-main">
+        <span class="thumb"></span>
+        <button data-kind="lectures">Лекции<span class="c" id="c-lectures"></span></button>
+        <button data-kind="seminars">Семинары<span class="c" id="c-seminars"></span></button>
+      </div>
+      <label class="searchbox">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Поиск" autocomplete="off">
+      </label>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>
+    <span>HSE · Data Science and Business Analytics · 2026</span>
+    <span><kbd>←</kbd> <kbd>→</kbd> листать · <kbd>Esc</kbd> назад · <kbd>/</kbd> поиск</span>
+  </footer>
+</main>
+
+<!-- ---------- viewer ---------- -->
+<div class="viewer" id="viewer" aria-hidden="true">
+  <div class="vbar glass">
+    <div class="vleft">
+      <button class="back" id="back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 18-6-6 6-6"/></svg><span>Все материалы</span>
       </button>
-      <div class="crumb">
-        <small id="c-subj"></small>
-        <h1 id="c-title"></h1>
+      <button class="tb on" id="sbtoggle" title="Список" aria-label="Показать список">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>
+      </button>
+    </div>
+    <div class="vtitle"><small id="v-subj"></small><b id="v-title"></b></div>
+    <div class="vright">
+      <button class="tb" id="prev" title="Предыдущий (←)" aria-label="Предыдущий">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <span class="pos hide-sm" id="pos"></span>
+      <button class="tb" id="next" title="Следующий (→)" aria-label="Следующий">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <a class="tb hide-sm" id="open" target="_blank" rel="noopener" title="Открыть в новой вкладке" aria-label="Открыть в новой вкладке">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
+      </a>
+      <a class="tb" id="dl" download title="Скачать" aria-label="Скачать">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="vbody">
+    <aside class="sb" id="sb">
+      <div class="seg" id="seg-side">
+        <span class="thumb"></span>
+        <button data-kind="lectures">Лекции</button>
+        <button data-kind="seminars">Семинары</button>
       </div>
-      <div class="nav">
-        <button class="iconbtn" id="prev" title="Предыдущая (←)" aria-label="Предыдущая">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <span class="pos" id="pos"></span>
-        <button class="iconbtn" id="next" title="Следующая (→)" aria-label="Следующая">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
-        <a class="linkbtn hide-sm" id="open" target="_blank" rel="noopener">Открыть
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
-        </a>
-        <a class="iconbtn" id="dl" download title="Скачать" aria-label="Скачать">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
-        </a>
-      </div>
-    </header>
+      <div id="sblist"></div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
     <section class="stage" id="stage"></section>
-  </main>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -184,11 +344,11 @@ a{color:inherit}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
 const SUBJECTS = {
-  "calculus":        { name: "Calculus",                    color: "#2563eb" },
-  "linear-algebra":  { name: "Linear Algebra & Geometry",   color: "#7c3aed" },
-  "discrete-math":   { name: "Discrete Math",               color: "#059669" },
-  "cpp":             { name: "C++ Programming",             color: "#c2410c" },
-  "russian-history": { name: "Russian History",             color: "#be123c" },
+  "calculus":        { name: "Calculus",                  glyph: "∫",   grad: ["#0a84ff", "#5e5ce6"] },
+  "linear-algebra":  { name: "Linear Algebra & Geometry", glyph: "λ",   grad: ["#bf5af2", "#5e5ce6"] },
+  "discrete-math":   { name: "Discrete Math",             glyph: "∀",   grad: ["#30d158", "#00a3a3"] },
+  "cpp":             { name: "C++ Programming",           glyph: "{ }", grad: ["#ff9f0a", "#ff453a"] },
+  "russian-history": { name: "Russian History",           glyph: "§",   grad: ["#ff375f", "#bf5af2"] },
 };
 
 const DATA = {
@@ -204,191 +364,308 @@ const DATA = {
     { s: "linear-algebra", file: "lecture-04.pdf", title: "Lecture 4 — Systems of linear equations", meta: "4 стр." },
     { s: "linear-algebra", file: "lecture-05.pdf", title: "Lecture 5 — Permutations", meta: "6 стр." },
     { s: "linear-algebra", file: "lecture-05-ru.html", title: "Лекция 5 — Перестановки (перевод)", meta: "конспект на русском" },
-    { s: "linear-algebra", file: "permutations.pdf", title: "Подстановки — разбор с примерами", meta: "доп. материал" },
+    { s: "linear-algebra", file: "permutations.pdf", title: "Доп. материал — Подстановки с примерами", meta: "2 стр." },
     { s: "linear-algebra", file: "lecture-06.pdf", title: "Lecture 6 — Determinants", meta: "5 стр." },
 
-    { s: "discrete-math", file: "lecture-notes.pdf", title: "Элементы дискретной математики", meta: "Е. В. Дашков · 140 стр." },
+    { s: "discrete-math", file: "lecture-notes.pdf", title: "Конспект — Элементы дискретной математики", meta: "Е. В. Дашков · 140 стр." },
 
-    { s: "cpp", file: "cpp-notes.pdf", title: "C++ Notes — конспект лекций", meta: "М. Горденко · 64 стр." },
-    { s: "cpp", file: "review-types-operations.html", title: "Повторение: типы данных и операции", meta: "конспект" },
+    { s: "cpp", file: "cpp-notes.pdf", title: "Конспект — C++ Notes", meta: "М. Горденко · 64 стр." },
+    { s: "cpp", file: "review-types-operations.html", title: "Повторение — Типы данных и операции", meta: "конспект" },
   ],
   seminars: [
     { s: "calculus", file: "seminar-02-tasks.pdf", title: "Seminar 2 — Limits of sequences", meta: "задачи" },
-    { s: "calculus", file: "seminar-02-notes.pdf", title: "Seminar 2 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-02-notes.pdf", title: "Seminar 2 — Записи с семинара", meta: "записи" },
     { s: "calculus", file: "seminar-03-tasks.pdf", title: "Seminar 3 — Limits: computations", meta: "задачи" },
-    { s: "calculus", file: "seminar-03-notes.pdf", title: "Seminar 3 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-03-notes.pdf", title: "Seminar 3 — Записи с семинара", meta: "записи" },
     { s: "calculus", file: "seminar-04-tasks.pdf", title: "Seminar 4 — Limits of sequences", meta: "задачи" },
-    { s: "calculus", file: "seminar-04-notes.pdf", title: "Seminar 4 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-04-notes.pdf", title: "Seminar 4 — Записи с семинара", meta: "записи" },
     { s: "calculus", file: "seminar-05-tasks.pdf", title: "Seminar 5 — Limits of functions", meta: "задачи" },
-    { s: "calculus", file: "seminar-05-notes.pdf", title: "Seminar 5 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-05-notes.pdf", title: "Seminar 5 — Записи с семинара", meta: "записи" },
     { s: "calculus", file: "seminar-06-tasks.pdf", title: "Seminar 6 — First remarkable limit", meta: "задачи" },
-    { s: "calculus", file: "seminar-06-notes.pdf", title: "Seminar 6 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-06-notes.pdf", title: "Seminar 6 — Записи с семинара", meta: "записи" },
 
     { s: "cpp", file: "seminar-01.md", title: "Seminar 1 — From source code to a running program", meta: "" },
     { s: "cpp", file: "seminar-02.md", title: "Seminar 2 — How C++ stores numbers", meta: "" },
     { s: "cpp", file: "lab-01-workbook.md", title: "Lab 1 — From bits to benchmarks", meta: "workbook" },
 
-    { s: "russian-history", file: "seminar-01.pptx", title: "Seminar 1 — презентация", meta: "8 сентября" },
-    { s: "russian-history", file: "seminar-01-prep.md", title: "Seminar 1 — подготовка", meta: "8 сентября" },
+    { s: "russian-history", file: "seminar-01.pptx", title: "Seminar 1 — Презентация", meta: "8 сентября" },
   ],
 };
+const ALL = [];
 for (const kind in DATA) DATA[kind].forEach(it => {
   it.kind = kind;
   it.path = `${kind}/${it.s}/${it.file}`;
   it.id = `${kind}/${it.s}/${it.file.replace(/\.[^.]+$/, "")}`;
   it.ext = it.file.split(".").pop();
+  [it.label, it.name] = it.title.includes(" — ") ? it.title.split(" — ") : ["", it.title];
+  ALL.push(it);
 });
 
 const $ = s => document.querySelector(s);
-const app = $("#app"), list = $("#list"), stage = $("#stage"), q = $("#q");
-let kind = "lectures", current = null;
-const last = {};
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const plural = (n, one, few, many) => n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many;
+const KIND = { lectures: ["лекция", "лекции", "лекций"], seminars: ["материал", "материала", "материалов"] };
+const count = (n, kind) => `${n} ${plural(n, ...KIND[kind])}`;
+const gradOf = s => `linear-gradient(135deg,${SUBJECTS[s].grad[0]},${SUBJECTS[s].grad[1]})`;
+const chevron = `<svg class="chev" width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1.5 1.5 5 5-5 5"/></svg>`;
 
-function store(k, v) { try { v === undefined ? null : localStorage.setItem(k, v); return localStorage.getItem(k); } catch { return null; } }
-
-function visible() {
-  const term = q.value.trim().toLowerCase();
-  return DATA[kind].filter(it => !term || (it.title + " " + SUBJECTS[it.s].name + " " + it.meta).toLowerCase().includes(term));
+function store(k, v) {
+  try { if (v !== undefined) localStorage.setItem(k, v); return localStorage.getItem(k); } catch { return null; }
 }
 
-function renderList() {
-  document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.kind === kind));
-  const items = visible();
-  if (!items.length) { list.innerHTML = `<div class="empty">Ничего не найдено</div>`; return; }
+let mode = store("hse:mode") === "seminars" ? "seminars" : "lectures";
+let current = null;
+const lastOf = {};
+
+/* ---------- home ---------- */
+const subjectsOf = kind => [...new Set(DATA[kind].map(it => it.s))];
+
+function renderStatic() {
+  const nSubj = Object.keys(SUBJECTS).length;
+  $("#hero-sub").textContent = `${count(DATA.lectures.length, "lectures")} и ${DATA.seminars.length} материалов с семинаров по ${nSubj} предметам. Выбери раздел — и сразу к делу.`;
+  for (const k of ["lectures", "seminars"]) {
+    $("#t-" + k).textContent = DATA[k].length;
+    $("#c-" + k).textContent = DATA[k].length;
+    $("#s-" + k).innerHTML = subjectsOf(k).map(s => `<span>${SUBJECTS[s].name}<i style="background:${gradOf(s)}"></i></span>`).join("");
+  }
+}
+
+function renderResume() {
+  const it = ALL.find(x => x.id === store("hse:last"));
+  $("#resume-slot").innerHTML = it
+    ? `<button class="resume" data-id="${it.id}"><small>Продолжить</small><span>${esc(it.name)}</span>${chevron.replace('class="chev"', 'style="color:#fff;opacity:.8"')}</button>`
+    : "";
+}
+
+function renderLibrary(animate = true) {
+  document.querySelectorAll("[data-go]").forEach(b => b.classList.toggle("on", b.dataset.go === mode));
+  moveThumb($("#seg-main"), mode);
+  $("#lib-title").textContent = mode === "lectures" ? "Лекции" : "Семинары";
+  const subs = subjectsOf(mode);
+  $("#lib-sub").textContent = `${count(DATA[mode].length, mode)} · ${subs.length} ${plural(subs.length, "предмет", "предмета", "предметов")}`;
+
+  const term = $("#q").value.trim().toLowerCase();
+  const items = DATA[mode].filter(it => !term || (it.title + " " + SUBJECTS[it.s].name + " " + it.meta).toLowerCase().includes(term));
+  if (!items.length) { $("#grid").innerHTML = `<div class="empty">Ничего не нашлось по запросу «${esc(term)}»</div>`; return; }
+
   const groups = {};
   items.forEach(it => (groups[it.s] ||= []).push(it));
-  list.innerHTML = Object.entries(groups).map(([s, arr]) => `
-    <div class="group">
-      <h3><i style="background:${SUBJECTS[s].color}"></i>${SUBJECTS[s].name}</h3>
-      ${arr.map((it, i) => `
-        <button class="item${current && current.id === it.id ? " on" : ""}" data-id="${it.id}">
-          <span class="num">${String(i + 1).padStart(2, "0")}</span>
-          <span class="t"><span>${it.title}</span>${it.meta ? `<span class="meta">${it.meta}</span>` : ""}</span>
-          <span class="ext">${it.ext}</span>
-        </button>`).join("")}
-    </div>`).join("");
-  const on = list.querySelector(".item.on");
+  $("#grid").innerHTML = Object.entries(groups).map(([s, arr], gi) => {
+    const total = DATA[mode].filter(x => x.s === s).length;
+    return `
+    <article class="card" style="${animate ? `animation-delay:${gi * 60}ms` : "animation:none"}">
+      <header>
+        <span class="icon" style="background:${gradOf(s)};${SUBJECTS[s].glyph.length > 1 ? "font-size:18px" : ""}">${SUBJECTS[s].glyph}</span>
+        <div><h3>${SUBJECTS[s].name}</h3><small>${count(total, mode)}</small></div>
+      </header>
+      <div class="rows">${pairUp(arr).map((g, i) => g.length > 1 ? `
+          <div class="row pair">
+            <span class="badge">${numOf(g[0], i)}</span>
+            <span class="rt"><b>${esc(g[0].name)}</b><small>${esc(g[0].label)}</small></span>
+            <span class="pills">${g.map(it => `<button class="mini" data-id="${it.id}">${esc(cap(it.meta))}</button>`).join("")}</span>
+          </div>` : `
+          <button class="row" data-id="${g[0].id}">
+            <span class="badge">${numOf(g[0], i)}</span>
+            <span class="rt"><b>${esc(g[0].name)}</b><small>${esc([g[0].label, g[0].meta].filter(Boolean).join(" · "))}</small></span>
+            <span class="chip">${g[0].ext}</span>${chevron}
+          </button>`).join("")}
+      </div>
+    </article>`;
+  }).join("");
+}
+
+// Задачи и записи одного семинара (одинаковый label подряд) — одной строкой
+function pairUp(arr) {
+  const out = [];
+  arr.forEach(it => {
+    const prev = out[out.length - 1];
+    if (prev && it.label && prev[0].label === it.label && prev[0].s === it.s) prev.push(it);
+    else out.push([it]);
+  });
+  return out;
+}
+const numOf = (it, i) => (it.label.match(/\d+/) || [it.label ? "•" : i + 1])[0];
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+function moveThumb(seg, kind) {
+  const btn = seg.querySelector(`[data-kind="${kind}"]`), th = seg.querySelector(".thumb");
+  if (!btn || !btn.offsetWidth) return;
+  th.style.left = btn.offsetLeft + "px";
+  th.style.width = btn.offsetWidth + "px";
+  seg.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === btn));
+}
+
+function setMode(k, scroll) {
+  if (k !== mode) { mode = k; store("hse:mode", k); renderLibrary(); }
+  else renderLibrary(false);
+  if (scroll) $("#library").scrollIntoView({ behavior: "smooth" });
+}
+
+/* ---------- viewer ---------- */
+const viewer = $("#viewer"), stage = $("#stage");
+
+function renderSidebar() {
+  moveThumb($("#seg-side"), current.kind);
+  const groups = {};
+  DATA[current.kind].forEach(it => (groups[it.s] ||= []).push(it));
+  $("#sblist").innerHTML = Object.entries(groups).map(([s, arr]) => `
+    <h4><i style="background:${gradOf(s)}"></i>${SUBJECTS[s].name}</h4>
+    ${arr.map((it, i) => `
+      <button class="sbi${it === current ? " on" : ""}" data-id="${it.id}">
+        <span class="n">${i + 1}</span>
+        <span class="t">${esc(it.name)}${it.label || it.meta ? `<small>${esc([it.label, it.meta].filter(Boolean).join(" · "))}</small>` : ""}</span>
+      </button>`).join("")}`).join("");
+  const on = $("#sblist .on");
   if (on) on.scrollIntoView({ block: "nearest" });
 }
 
-function setKind(k) {
-  kind = k;
-  renderList();
-}
-
-function show(it, push = true) {
+function openItem(it) {
   current = it;
-  last[it.kind] = it.id;
-  if (kind !== it.kind) kind = it.kind;
-  renderList();
-  const subj = SUBJECTS[it.s];
-  $("#c-subj").innerHTML = `<i style="background:${subj.color}"></i>${subj.name} · ${it.kind === "lectures" ? "Лекции" : "Семинары"}`;
-  $("#c-title").textContent = it.title;
-  document.title = `${it.title} — HSE DSBA`;
+  lastOf[it.kind] = it.id;
+  store("hse:last", it.id);
+  document.body.classList.add("viewing");
+  viewer.classList.add("open");
+  viewer.setAttribute("aria-hidden", "false");
+  viewer.classList.remove("sbm");
+
+  $("#v-subj").innerHTML = `<i style="background:${gradOf(it.s)}"></i>${SUBJECTS[it.s].name}${it.label ? " · " + esc(it.label) : ""}`;
+  $("#v-title").textContent = it.name;
+  document.title = `${it.name} — HSE DSBA`;
   const arr = DATA[it.kind], i = arr.indexOf(it);
-  $("#pos").textContent = `${i + 1} / ${arr.length}`;
+  $("#pos").textContent = `${i + 1} из ${arr.length}`;
   $("#prev").disabled = i === 0;
   $("#next").disabled = i === arr.length - 1;
   $("#open").href = it.path;
   $("#dl").href = it.path;
-  if (push) history.replaceState(null, "", "#" + it.id);
-  store("hse:last", it.id);
-  app.classList.remove("open");
+  renderSidebar();
   renderStage(it);
 }
 
+function closeViewer() {
+  current = null;
+  document.body.classList.remove("viewing");
+  viewer.classList.remove("open");
+  viewer.setAttribute("aria-hidden", "true");
+  document.title = "HSE DSBA — Лекции";
+  setTimeout(() => { if (!current) stage.innerHTML = ""; }, 350);
+  renderResume();
+  requestAnimationFrame(() => moveThumb($("#seg-main"), mode));
+}
+
 async function renderStage(it) {
-  stage.innerHTML = `<div class="loading">загрузка…</div>`;
+  stage.innerHTML = `<div class="spinner"></div>`;
+  const local = /^(localhost|127\.|\[::1\])/.test(location.hostname) || location.protocol === "file:";
   if (it.ext === "pdf") {
-    stage.innerHTML = `<iframe src="${it.path}#view=FitH" title="${it.title}"></iframe>`;
+    stage.innerHTML = `<iframe src="${it.path}#view=FitH" title="${esc(it.title)}"></iframe>`;
   } else if (it.ext === "html") {
-    stage.innerHTML = `<iframe src="${it.path}" title="${it.title}"></iframe>`;
+    stage.innerHTML = `<iframe src="${it.path}" title="${esc(it.title)}"></iframe>`;
   } else if (it.ext === "pptx") {
     const abs = new URL(it.path, location.href).href;
-    if (/^(localhost|127\.|\[::1\])/.test(location.hostname) || location.protocol === "file:") {
-      stage.innerHTML = `<div class="notice"><div><b>Презентация PowerPoint</b>Просмотр в браузере работает на опубликованном сайте.<br>Локально — скачай файл.<br><a class="linkbtn" href="${it.path}" download>Скачать .pptx</a></div></div>`;
-    } else {
-      stage.innerHTML = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(abs)}" title="${it.title}"></iframe>`;
-    }
+    stage.innerHTML = local
+      ? `<div class="notice"><div><b>Презентация PowerPoint</b>Просмотр в браузере заработает после деплоя.<br>Пока можно скачать файл.<br><a class="pill" href="${it.path}" download>Скачать .pptx</a></div></div>`
+      : `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(abs)}" title="${esc(it.title)}"></iframe>`;
   } else if (it.ext === "md") {
     try {
-      const res = await fetch(it.path);
-      const text = await res.text();
+      const text = await (await fetch(it.path)).text();
       if (current !== it) return;
       stage.innerHTML = `<div class="doc"><article class="md">${renderMarkdown(text)}</article></div>`;
-      stage.querySelectorAll("pre code").forEach(el => window.hljs && hljs.highlightElement(el));
+      if (window.hljs) stage.querySelectorAll("pre code").forEach(el => hljs.highlightElement(el));
     } catch {
-      stage.innerHTML = `<div class="notice"><div><b>Не удалось загрузить файл</b><a class="linkbtn" href="${it.path}" target="_blank">Открыть напрямую</a></div></div>`;
+      stage.innerHTML = `<div class="notice"><div><b>Не удалось загрузить</b><a class="pill" href="${it.path}" target="_blank">Открыть напрямую</a></div></div>`;
     }
   }
 }
 
-// Markdown + формулы: вырезаем $…$ до marked, чтобы он не трогал _ и *
+// Markdown + формулы: прячем $…$ от marked, чтобы он не портил _ и *
 function renderMarkdown(src) {
   const math = [];
   const keep = (tex, display) => { math.push({ tex, display }); return `@@MATH${math.length - 1}@@`; };
-  const parts = src.split(/(```[\s\S]*?```|`[^`\n]*`)/g);
-  src = parts.map((p, i) => i % 2 ? p : p
+  src = src.split(/(```[\s\S]*?```|`[^`\n]*`)/g).map((p, i) => i % 2 ? p : p
     .replace(/\$\$([\s\S]+?)\$\$/g, (_, t) => keep(t, true))
     .replace(/\$([^$\n]+?)\$/g, (_, t) => keep(t, false))).join("");
-  let html = marked.parse(src, { gfm: true });
-  return html.replace(/@@MATH(\d+)@@/g, (_, n) => {
+  return marked.parse(src, { gfm: true }).replace(/@@MATH(\d+)@@/g, (_, n) => {
     const { tex, display } = math[n];
-    try { return katex.renderToString(tex, { displayMode: display, throwOnError: false }); }
-    catch { return tex; }
+    try { return katex.renderToString(tex, { displayMode: display, throwOnError: false }); } catch { return tex; }
   });
 }
 
 function step(d) {
   if (!current) return;
-  const arr = DATA[current.kind], i = arr.indexOf(current) + d;
-  if (arr[i]) show(arr[i]);
+  const arr = DATA[current.kind], next = arr[arr.indexOf(current) + d];
+  if (next) { history.replaceState(null, "", "#" + next.id); openItem(next); }
 }
 
-function fromHash() {
-  const id = decodeURIComponent(location.hash.slice(1)) || store("hse:last");
-  const all = [...DATA.lectures, ...DATA.seminars];
-  return all.find(it => it.id === id) || DATA.lectures[0];
+/* ---------- routing: #<id> — просмотр, пусто — главная ---------- */
+function route() {
+  const it = ALL.find(x => x.id === decodeURIComponent(location.hash.slice(1)));
+  if (it) { if (it !== current) openItem(it); }
+  else if (current) closeViewer();
 }
 
-// events
-document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
-  const k = b.dataset.kind;
-  if (k === kind) return;
-  setKind(k);
-  const target = DATA[k].find(it => it.id === last[k]) || DATA[k][0];
-  show(target);
+/* ---------- events ---------- */
+document.addEventListener("click", e => {
+  const idEl = e.target.closest("[data-id]");
+  if (idEl) { location.hash = idEl.dataset.id; return; }
+  const goEl = e.target.closest("[data-go]");
+  if (goEl) setMode(goEl.dataset.go, true);
 });
-list.onclick = e => {
-  const b = e.target.closest(".item");
-  if (b) show([...DATA.lectures, ...DATA.seminars].find(it => it.id === b.dataset.id));
-};
-q.oninput = renderList;
+$("#seg-main").addEventListener("click", e => { const b = e.target.closest("[data-kind]"); if (b) setMode(b.dataset.kind); });
+$("#seg-side").addEventListener("click", e => {
+  const b = e.target.closest("[data-kind]");
+  if (!b || b.dataset.kind === current.kind) return;
+  const k = b.dataset.kind;
+  location.hash = (ALL.find(x => x.id === lastOf[k]) || DATA[k][0]).id;
+});
+$("#q").addEventListener("input", () => renderLibrary(false));
+$("#back").onclick = () => { location.hash = ""; };
 $("#prev").onclick = () => step(-1);
 $("#next").onclick = () => step(1);
-$("#menu").onclick = () => app.classList.add("open");
-$("#scrim").onclick = () => app.classList.remove("open");
-window.addEventListener("hashchange", () => { const it = fromHash(); if (it !== current) show(it, false); });
+$("#scrim").onclick = () => viewer.classList.remove("sbm");
+$("#sbtoggle").onclick = () => {
+  if (matchMedia("(max-width:860px)").matches) { viewer.classList.toggle("sbm"); return; }
+  viewer.classList.toggle("nosb");
+  store("hse:nosb", viewer.classList.contains("nosb") ? "1" : "0");
+  $("#sbtoggle").classList.toggle("on", !viewer.classList.contains("nosb"));
+};
+if (store("hse:nosb") === "1") { viewer.classList.add("nosb"); $("#sbtoggle").classList.remove("on"); }
+
 document.addEventListener("keydown", e => {
-  if (e.target.matches("input,textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === "ArrowLeft") step(-1);
-  if (e.key === "ArrowRight") step(1);
-  if (e.key === "/") { e.preventDefault(); q.focus(); }
+  if (e.target.matches("input,textarea") || e.metaKey || e.ctrlKey || e.altKey) {
+    if (e.key === "Escape") e.target.blur();
+    return;
+  }
+  if (current) {
+    if (e.key === "ArrowLeft") step(-1);
+    if (e.key === "ArrowRight") step(1);
+    if (e.key === "Escape") location.hash = "";
+  } else if (e.key === "/") {
+    e.preventDefault();
+    $("#library").scrollIntoView({ behavior: "smooth" });
+    $("#q").focus({ preventScroll: true });
+  }
 });
+window.addEventListener("hashchange", route);
+window.addEventListener("resize", () => { moveThumb($("#seg-main"), mode); if (current) moveThumb($("#seg-side"), current.kind); });
+
+const controls = $("#controls");
+new IntersectionObserver(([en]) => controls.classList.toggle("stuck", en.intersectionRatio < 1),
+  { rootMargin: "-49px 0px 0px 0px", threshold: 1 }).observe(controls);
 
 // theme
 function applyTheme(t) { t ? document.documentElement.dataset.theme = t : delete document.documentElement.dataset.theme; }
-applyTheme(store("hse:theme") || null);
+applyTheme(store("hse:theme"));
 $("#theme").onclick = () => {
-  const cur = document.documentElement.dataset.theme || null;
+  const cur = document.documentElement.dataset.theme;
   const dark = cur ? cur === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  const nextT = dark ? "light" : "dark";
-  applyTheme(nextT); store("hse:theme", nextT);
+  applyTheme(dark ? "light" : "dark");
+  store("hse:theme", dark ? "light" : "dark");
 };
 
-$("#n-lectures").textContent = DATA.lectures.length;
-$("#n-seminars").textContent = DATA.seminars.length;
-show(fromHash());
+renderStatic();
+renderResume();
+renderLibrary();
+route();
+if (document.fonts) document.fonts.ready.then(() => moveThumb($("#seg-main"), mode));
 </script>
 </body>
 </html>
