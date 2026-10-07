@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Повторение C++ — типы данных и операции</title>
+<style>
+  :root{
+    --bg:#fbfaf8; --fg:#22201d; --muted:#6b6560; --line:#e3ded7;
+    --card:#ffffff; --code-bg:#f4f1ec; --accent:#8a3f14; --accent-soft:#f6ece4;
+    --warn:#8a5a00; --warn-bg:#fdf4e0; --ok:#2f6b3f; --ok-bg:#eaf5ec;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  :root:not([data-theme="light"]){}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#171614; --fg:#e8e4de; --muted:#a09991; --line:#332f2b;
+      --card:#1e1d1a; --code-bg:#232120; --accent:#e0996a; --accent-soft:#2a211b;
+      --warn:#e0b25f; --warn-bg:#2a2418; --ok:#8fc79f; --ok-bg:#1c2a20;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171614; --fg:#e8e4de; --muted:#a09991; --line:#332f2b;
+    --card:#1e1d1a; --code-bg:#232120; --accent:#e0996a; --accent-soft:#2a211b;
+    --warn:#e0b25f; --warn-bg:#2a2418; --ok:#8fc79f; --ok-bg:#1c2a20;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px 100px}
+  header{padding:48px 0 28px;border-bottom:1px solid var(--line);margin-bottom:8px}
+  h1{font-size:29px;line-height:1.25;margin:0 0 10px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:15px;margin:0}
+  nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
+    padding:11px 0;margin-bottom:34px;z-index:10}
+  nav .inner{max-width:860px;margin:0 auto;padding:0 22px;display:flex;flex-wrap:wrap;gap:6px 14px}
+  nav a{color:var(--muted);text-decoration:none;font-size:13.5px;white-space:nowrap}
+  nav a:hover{color:var(--accent)}
+  h2{font-size:22px;margin:52px 0 6px;letter-spacing:-.01em;scroll-margin-top:64px}
+  h2 .num{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:8px}
+  h3{font-size:17px;margin:30px 0 4px}
+  h4{font-size:15px;margin:22px 0 2px;color:var(--muted);font-weight:600}
+  p{margin:11px 0}
+  ul,ol{margin:11px 0;padding-left:22px}
+  li{margin:5px 0}
+  code{font-family:var(--mono);font-size:13.5px;background:var(--code-bg);
+    padding:1.5px 5px;border-radius:4px}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
+    padding:14px 16px;overflow-x:auto;margin:14px 0}
+  pre code{background:none;padding:0;font-size:13px;line-height:1.6}
+  .cmt{color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px;display:block;overflow-x:auto}
+  th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-weight:600;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  td code{font-size:13px}
+  .box{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:12px 16px;border-radius:0 8px 8px 0;margin:18px 0}
+  .box.warn{border-color:var(--warn);background:var(--warn-bg)}
+  .box.ok{border-color:var(--ok);background:var(--ok-bg)}
+  .box p:first-child{margin-top:0} .box p:last-child{margin-bottom:0}
+  .box .lbl{font-weight:650;font-size:13px;letter-spacing:.02em;display:block;margin-bottom:5px}
+  .lab{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);
+    background:var(--accent-soft);border:1px solid var(--accent);border-radius:20px;
+    padding:2px 10px;margin-left:8px;vertical-align:middle;white-space:nowrap}
+  details{border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:14px 0;background:var(--card)}
+  details[open]{padding-bottom:6px}
+  summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"？ ";color:var(--accent);font-weight:700}
+  details[open] summary{margin-bottom:8px}
+  .bits{font-family:var(--mono);font-size:13.5px;line-height:1.9;letter-spacing:.5px}
+  .bits b{color:var(--accent);font-weight:700}
+  footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13.5px}
+  @media(max-width:600px){h1{font-size:24px}h2{font-size:19px}.wrap{padding:0 16px 70px}nav .inner{padding:0 16px}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <h1>Повторение C++: типы данных и операции</h1>
+  <p class="sub">Конспект со Stepik-курса Гордиенко, приведённый в порядок и связанный с заданиями лабораторной&nbsp;01. Ошибки исходного текста исправлены и отмечены.</p>
+</header>
+</div>
+
+<nav><div class="inner">
+  <a href="#types">1. Типы данных</a>
+  <a href="#int">2. Целые</a>
+  <a href="#float">3. Вещественные</a>
+  <a href="#bool">4. bool</a>
+  <a href="#sizeof">5. sizeof</a>
+  <a href="#incr">6. ++ и --</a>
+  <a href="#bitwise">7. Битовые</a>
+  <a href="#cast">8. static_cast</a>
+  <a href="#comma">9. Запятая</a>
+  <a href="#errata">10. Ошибки в конспекте</a>
+</div></nav>
+
+<div class="wrap">
+
+<div class="box ok">
+  <span class="lbl">Зачем это повторять именно сейчас</span>
+  <p>Каждая тема отсюда — это конкретное задание лабораторной 01 (дедлайн 20.09). Битовые операции — Task&nbsp;1, переполнение — Task&nbsp;2, вещественные числа — Task&nbsp;3, сдвиги против арифметики — Task&nbsp;4, <code>sizeof</code> и размеры типов — Task&nbsp;5. Метки <span class="lab">Task N</span> по тексту показывают, где что пригодится.</p>
+</div>
+
+<h2 id="types"><span class="num">1.</span>Типы данных</h2>
+
+<p><strong>Тип данных</strong> — это свойство программной сущности, которое определяет три вещи:</p>
+<ul>
+  <li>множество допустимых значений;</li>
+  <li>допустимые операции;</li>
+  <li>низкоуровневое представление, то есть как интерпретировать биты.</li>
+</ul>
+
+<p>Третий пункт — самый важный для лабы. Одна и та же последовательность битов означает разное в зависимости от типа: <code>11111111 11111111 11111111 11101111</code> — это либо &minus;17, либо 4294967279. Разница только в том, как мы договорились читать старший бит.</p>
+
+<p>Большинство типов в C++ прямо или косвенно строятся на фундаментальных:</p>
+<ul>
+  <li><strong>Целые</strong> — <code>int</code>, <code>short</code>, <code>long</code>, <code>long long</code></li>
+  <li><strong>С плавающей точкой</strong> — <code>float</code>, <code>double</code>, <code>long double</code></li>
+  <li><strong>Символьные</strong> — <code>char</code>, <code>char8_t</code>, <code>char16_t</code>, <code>char32_t</code>, <code>wchar_t</code></li>
+  <li><strong>Логический</strong> — <code>bool</code></li>
+  <li><strong>Пустой</strong> — <code>void</code></li>
+  <li><strong>Нулевой указатель</strong> — <code>std::nullptr_t</code> (единственное значение <code>nullptr</code>, введён в C++11)</li>
+</ul>
+
+<p>Составные типы: <code>enum</code> (под капотом целочисленный), <code>struct</code> (несколько переменных под одним именем), <code>class</code> (данные плюс методы, основа ООП).</p>
+
+<h2 id="int"><span class="num">2.</span>Целочисленные типы <span class="lab">Task 2, 5</span></h2>
+
+<table>
+<thead><tr><th>Тип</th><th>Размер</th><th>Знак</th></tr></thead>
+<tbody>
+<tr><td><code>short</code></td><td>обычно 2 байта</td><td>со знаком</td></tr>
+<tr><td><code>int</code></td><td>обычно 4 байта</td><td>со знаком</td></tr>
+<tr><td><code>long</code></td><td>4 или 8 байт — зависит от платформы</td><td>со знаком</td></tr>
+<tr><td><code>long long</code></td><td>обычно 8 байт</td><td>со знаком</td></tr>
+<tr><td><code>unsigned short</code></td><td>обычно 2 байта</td><td>без знака</td></tr>
+<tr><td><code>unsigned int</code></td><td>обычно 4 байта</td><td>без знака</td></tr>
+<tr><td><code>unsigned long</code></td><td>4 или 8 байт</td><td>без знака</td></tr>
+<tr><td><code>unsigned long long</code></td><td>обычно 8 байт</td><td>без знака</td></tr>
+</tbody>
+</table>
+
+<div class="box warn">
+  <span class="lbl">Осторожно с long</span>
+  <p>В конспекте написано «обычно 8 байт на современных системах». Это верно только для Linux и macOS. На <strong>Windows <code>long</code> занимает 4 байта</strong> даже в 64-битных сборках. Отсюда правило: если нужен гарантированный размер — бери типы фиксированной ширины из <code>&lt;cstdint&gt;</code>: <code>int8_t</code>, <code>int16_t</code>, <code>int32_t</code>, <code>int64_t</code> и их <code>uint</code>-версии. В лабе именно они и требуются.</p>
+</div>
+
+<h3>Дополнительный код</h3>
+
+<p>Отрицательные числа хранятся в дополнительном коде. Рецепт: взять модуль числа, инвертировать все биты, прибавить единицу.</p>
+
+<p class="bits">
+17&nbsp; = 00000000 00000000 00000000 00010001<br>
+инверсия = 11111111 11111111 11111111 11101110<br>
++1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <b>11111111 11111111 11111111 11101111</b> &nbsp;= &minus;17
+</p>
+
+<p>Зачем так сделали — два ответа. Первый: ноль получается ровно один, тогда как в прямом коде есть <code>+0</code> и <code>&minus;0</code>. Второй, главный: сложи 17 и &minus;17 обычным двоичным сложением — единицы побегут по цепочке, перенос за пределы 32 бит отбросится, останется ноль. Вычитание сводится к сложению, и процессору хватает одного сумматора вместо двух разных схем.</p>
+
+<details>
+<summary>Проверь себя: почему <code>~x == -x - 1</code> для любого целого?</summary>
+<p>Из рецепта: <code>-x</code> получается как <code>~x + 1</code>. Значит <code>~x = -x - 1</code>. Например, <code>~42 == -43</code>, <code>~0 == -1</code>, <code>~(-1) == 0</code>.</p>
+</details>
+
+<h2 id="float"><span class="num">3.</span>Числа с плавающей точкой <span class="lab">Task 3</span></h2>
+
+<table>
+<thead><tr><th>Тип</th><th>Размер</th><th>Точность</th><th>Диапазон</th></tr></thead>
+<tbody>
+<tr><td><code>float</code></td><td>4 байта</td><td>6–7 знаков</td><td>≈ ±10<sup>&minus;38</sup> … ±10<sup>38</sup></td></tr>
+<tr><td><code>double</code></td><td>8 байт</td><td>≈ 15 знаков</td><td>≈ ±10<sup>&minus;308</sup> … ±10<sup>308</sup></td></tr>
+<tr><td><code>long double</code></td><td>8, 12 или 16 байт</td><td>18–19 знаков</td><td>≈ ±10<sup>&minus;4932</sup> … ±10<sup>4932</sup></td></tr>
+</tbody>
+</table>
+
+<h4>Литералы</h4>
+<pre><code>0.    1.5    3.14159      <span class="cmt">// double — суффикса нет</span>
+0.f   1.5F   3.14159f     <span class="cmt">// float — суффикс f или F</span>
+0.l   1.5L   3.14159l     <span class="cmt">// long double — суффикс l или L</span>
+
+123.456e10                <span class="cmt">// 123.456 × 10^10</span>
+123.456e-10               <span class="cmt">// 123.456 × 10^(-10)</span></code></pre>
+
+<h4>Что важно помнить</h4>
+<ul>
+  <li>Доступны те же арифметические операции, что и для целых, <strong>кроме битовых и взятия остатка</strong> <code>%</code>.</li>
+  <li>Точность ограничена: большинство дробей невозможно точно представить в двоичной системе. Классика — <code>0.1 + 0.2 != 0.3</code>.</li>
+  <li>Всегда знаковые — беззнакового <code>float</code> не существует.</li>
+  <li>Есть особые значения: <code>+inf</code>, <code>-inf</code> (деление ненулевого на ноль) и <code>NaN</code> (например, <code>0.0 / 0.0</code>).</li>
+  <li>При смешивании типов менее широкий приводится к более широкому: <code>float + double → double</code>, <code>int + float → float</code>.</li>
+</ul>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;    <span class="cmt">// для std::isnan, std::isinf</span>
+
+int main() {
+    double infPos =  1.0 / 0.0;   <span class="cmt">// +inf</span>
+    double infNeg = -1.0 / 0.0;   <span class="cmt">// -inf</span>
+    double nanVal =  0.0 / 0.0;   <span class="cmt">// nan</span>
+
+    std::cout &lt;&lt; infPos &lt;&lt; ' ' &lt;&lt; infNeg &lt;&lt; ' ' &lt;&lt; nanVal &lt;&lt; '\n';
+
+    if (std::isinf(infPos)) std::cout &lt;&lt; "infPos is infinite\n";
+    if (std::isnan(nanVal)) std::cout &lt;&lt; "nanVal is NaN\n";
+    return 0;
+}</code></pre>
+
+<div class="box">
+  <span class="lbl">Прямо для Task 3</span>
+  <p>В лабе нужно объяснить, почему <code>10.25 + 7.1</code> при печати через <code>setprecision(12)</code> даёт не то, что ожидаешь. Ключ: <strong>10.25 представимо точно</strong> (это 1010.01 в двоичной, конечная дробь), а <strong>7.1 — нет</strong> (бесконечная периодическая дробь, обрезается по мантиссе). Ошибка появляется во втором слагаемом ещё до сложения.</p>
+  <p>Там же нужно показать нарушение ассоциативности: <code>(a + b) + c != a + (b + c)</code>. Причина та же — каждое промежуточное сложение округляется, а порядок округлений разный.</p>
+</div>
+
+<details>
+<summary>Проверь себя: почему сравнение <code>a == b</code> для double опасно?</summary>
+<p>Потому что два разных пути вычисления одного и того же математического значения дают разные битовые представления. Правильный способ — сравнивать модуль разности с малым порогом: <code>std::abs(a - b) &lt; eps</code>. Порог подбирается под масштаб чисел, а не берётся «на глаз».</p>
+</details>
+
+<h2 id="bool"><span class="num">4.</span>Логический тип bool</h2>
+
+<p>Принимает ровно два значения — <code>true</code> и <code>false</code>. Занимает обычно 1 байт (не 1 бит: минимальная адресуемая единица памяти — байт).</p>
+
+<pre><code>int a = 5, b = 10;
+
+bool isGreater = a &gt; b;    <span class="cmt">// false → печатается как 0</span>
+bool isEqual   = (a == b); <span class="cmt">// false → печатается как 0</span></code></pre>
+
+<p>Операции сравнения: <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> <code>==</code> <code>!=</code>. Логические: <code>&amp;&amp;</code> (и), <code>||</code> (или), <code>!</code> (не).</p>
+
+<h3>Короткое замыкание</h3>
+
+<p>Это свойство <code>&amp;&amp;</code> и <code>||</code>, которое нужно понимать, а не просто знать:</p>
+<ul>
+  <li>Левый операнд гарантированно вычисляется раньше правого.</li>
+  <li>Если слева у <code>||</code> получилось <code>true</code> — правая часть <strong>не вычисляется вообще</strong>.</li>
+  <li>Если слева у <code>&amp;&amp;</code> получилось <code>false</code> — правая часть тоже не вычисляется.</li>
+</ul>
+
+<pre><code><span class="cmt">// Классическая защита от деления на ноль:</span>
+if (n != 0 &amp;&amp; total / n &gt; 10) { ... }
+<span class="cmt">// если n == 0, деление просто не выполнится</span></code></pre>
+
+<h2 id="sizeof"><span class="num">5.</span>Операция sizeof <span class="lab">Task 5</span></h2>
+
+<p>Унарная операция, возвращает размер типа или объекта в байтах.</p>
+
+<pre><code>sizeof(char) == 1;   <span class="cmt">// всегда 1 по стандарту</span>
+sizeof(int)  == 4;   <span class="cmt">// обычно 4, но зависит от платформы</span></code></pre>
+
+<div class="box warn">
+  <span class="lbl">Главное свойство: sizeof ничего не выполняет</span>
+  <p>Он анализирует только <em>тип</em> выражения, а само выражение не вычисляется. Побочных эффектов не будет.</p>
+</div>
+
+<pre><code>long long x;
+
+sizeof('a');    <span class="cmt">// 1 — в C++ символьный литерал имеет тип char</span>
+sizeof(1 / 0);  <span class="cmt">// 4 — тип int; деления на ноль НЕ произойдёт</span>
+sizeof(x = 1);  <span class="cmt">// 8 — размер long long; x не изменится</span>
+sizeof(++x);    <span class="cmt">// 8 — x не увеличится</span></code></pre>
+
+<h2 id="incr"><span class="num">6.</span>Инкремент и декремент</h2>
+
+<p>Унарные операции, изменяющие значение на единицу. Применимы только к <strong>lvalue</strong> — то, что имеет имя и адрес, то есть к переменной.</p>
+
+<pre><code>int x = 0;
+x++;   <span class="cmt">// постфиксный инкремент → x == 1</span>
+++x;   <span class="cmt">// префиксный инкремент  → x == 2</span>
+x--;   <span class="cmt">// постфиксный декремент → x == 1</span>
+--x;   <span class="cmt">// префиксный декремент  → x == 0</span></code></pre>
+
+<p>К <strong>prvalue</strong> — литералу или временному значению — применить нельзя:</p>
+
+<pre><code>++5;        <span class="cmt">// ошибка: 5 — prvalue</span>
+(x + 1)--;  <span class="cmt">// ошибка: (x + 1) — prvalue</span>
+
+<span class="cmt">// error: lvalue required as increment operand</span></code></pre>
+
+<h3>В чём разница префикса и постфикса</h3>
+
+<table>
+<thead><tr><th>Форма</th><th>Что возвращает</th><th>Категория</th></tr></thead>
+<tbody>
+<tr><td><code>++x</code></td><td>новое значение, сам аргумент после изменения</td><td>lvalue</td></tr>
+<tr><td><code>x++</code></td><td>старое значение, копию до изменения</td><td>rvalue</td></tr>
+</tbody>
+</table>
+
+<pre><code>int x = 0;
+std::cout &lt;&lt; ++x &lt;&lt; '\n';  <span class="cmt">// печатает 1, x == 1</span>
+std::cout &lt;&lt; x++ &lt;&lt; '\n';  <span class="cmt">// печатает 1, x == 2</span>
+
+--x = 10;  <span class="cmt">// допустимо: --x вернул lvalue</span>
+x-- = 11;  <span class="cmt">// ошибка компиляции: x-- вернул rvalue</span></code></pre>
+
+<div class="box">
+  <p>Практическое следствие: постфиксная форма обязана сохранить копию старого значения перед изменением. Для встроенных типов компилятор это оптимизирует, но для тяжёлых пользовательских типов в цикле <code>++it</code> дешевле, чем <code>it++</code>. Отсюда привычка писать <code>++i</code> в заголовке <code>for</code>.</p>
+</div>
+
+<h2 id="bitwise"><span class="num">7.</span>Битовые операции <span class="lab">Task 1, 4</span></h2>
+
+<table>
+<thead><tr><th>Операция</th><th>Название</th><th>Правило</th></tr></thead>
+<tbody>
+<tr><td><code>&amp;</code></td><td>побитовое И</td><td>1, если <em>оба</em> бита равны 1</td></tr>
+<tr><td><code>|</code></td><td>побитовое ИЛИ</td><td>1, если <em>хотя бы один</em> бит равен 1</td></tr>
+<tr><td><code>^</code></td><td>исключающее ИЛИ</td><td>1, если биты <em>различаются</em></td></tr>
+<tr><td><code>~</code></td><td>отрицание</td><td>инвертирует все биты</td></tr>
+<tr><td><code>&lt;&lt;</code></td><td>сдвиг влево</td><td>справа добавляются нули</td></tr>
+<tr><td><code>&gt;&gt;</code></td><td>сдвиг вправо</td><td>см. предупреждение ниже</td></tr>
+</tbody>
+</table>
+
+<h3>Разбор на числах из конспекта</h3>
+
+<p class="bits">
+x = 5&nbsp; = 00000<b>1</b>0<b>1</b> &nbsp;&nbsp;(биты 0 и 2)<br>
+y = 3&nbsp; = 000000<b>11</b> &nbsp;&nbsp;(биты 0 и 1)
+</p>
+
+<pre><code>x &amp; y  == 1   <span class="cmt">// 00000001 — общий только бит 0</span>
+x | y  == 7   <span class="cmt">// 00000111 — объединение битов 0, 1, 2</span>
+x ^ y  == 6   <span class="cmt">// 00000110 — бит 0 есть у обоих, вычёркивается</span>
+~x     == -6  <span class="cmt">// ...11111010 — правило ~x = -x - 1</span></code></pre>
+
+<h3>Сдвиги</h3>
+
+<pre><code>5  &lt;&lt; 2  == 20   <span class="cmt">// 00000101 → 00010100, умножение на 4</span>
+16 &gt;&gt; 2  == 4    <span class="cmt">// 00010000 → 00000100, деление на 4</span></code></pre>
+
+<div class="box warn">
+  <span class="lbl">Здесь конспект противоречит сам себе</span>
+  <p>В сводке написано, что при сдвиге вправо «освободившиеся биты заполняются нулями», а абзацем ниже — что для знаковых копируется старший бит. Верно второе.</p>
+  <p>Для <strong>знаковых</strong> типов сдвиг вправо <em>арифметический</em>: слева размножается знаковый бит, поэтому отрицательное остаётся отрицательным. Для <strong>беззнаковых</strong> — логический: слева нули.</p>
+  <p>Побочный эффект: округление идёт <strong>вниз</strong>, а не к нулю. <code>-17 &gt;&gt; 2</code> даёт <code>-5</code>, тогда как <code>-17 / 4</code> даёт <code>-4</code>. Сдвиг не эквивалентен делению для отрицательных чисел — это отдельный вопрос в Task&nbsp;1.</p>
+  <p>Полезная деталь для README: до C++20 поведение правого сдвига отрицательных было <em>implementation-defined</em>, стандарт его не гарантировал. C++20 закрепил арифметический сдвиг. Курс идёт на C++23, значит у вас гарантировано.</p>
+</div>
+
+<details>
+<summary>Проверь себя: чему равно <code>42 &amp; -17</code> и почему?</summary>
+<p><code>42</code>. Смотри на биты: <code>-17</code> в дополнительном коде — это все единицы, <em>кроме бита 4</em>. А у 42 (это 32+8+2, биты 5, 3 и 1) бит 4 и так нулевой. Значит И ничего не обнуляет, и результат равен 42.</p>
+<p>По той же причине <code>42 | -17 == -17</code>: у <code>-17</code> уже всё заполнено единицами, кроме бита 4, а 42 туда единицу не приносит.</p>
+</details>
+
+<div class="box">
+  <span class="lbl">Для Task 4</span>
+  <p>Замерять придётся три пары: <code>x / 2</code> против <code>x &gt;&gt; 1</code>, <code>x * 2</code> против <code>x &lt;&lt; 1</code>, <code>x % 2 == 0</code> против <code>(x &amp; 1) == 0</code>. Заранее держи в голове гипотезу: современный компилятор сам заменяет деление на константу-степень двойки сдвигом, поэтому разницы может почти не быть — и <em>объяснить отсутствие разницы</em> будет ценнее, чем показать её. Именно для этого в задании требуют <code>volatile</code>: он запрещает оптимизатору выбрасывать вычисления.</p>
+</div>
+
+<h2 id="cast"><span class="num">8.</span>Операция static_cast <span class="lab">Task 2</span></h2>
+
+<p>Явное преобразование типа. Синтаксис: <code>static_cast&lt;целевой_тип&gt;(выражение)</code>.</p>
+
+<pre><code>int x = 2;
+int y = 2000000000;
+
+std::cout &lt;&lt; x / y &lt;&lt; '\n';
+<span class="cmt">// 0 — целочисленное деление отбрасывает дробную часть</span>
+
+std::cout &lt;&lt; static_cast&lt;double&gt;(x) / y &lt;&lt; '\n';
+<span class="cmt">// 1e-09 — x стал double, деление стало вещественным</span>
+
+std::cout &lt;&lt; x * y &lt;&lt; '\n';
+<span class="cmt">// переполнение знакового int — это UB, неопределённое поведение</span>
+
+std::cout &lt;&lt; static_cast&lt;int64_t&gt;(x) * y &lt;&lt; '\n';
+<span class="cmt">// 4000000000 — умножение идёт уже в 64 битах</span></code></pre>
+
+<div class="box warn">
+  <span class="lbl">Ключевое различие для Task 2</span>
+  <p>Переполнение <strong>беззнаковых</strong> типов определено стандартом: арифметика идёт по модулю 2<sup>n</sup>, то есть <code>UINT32_MAX + 2</code> честно даёт <code>1</code>. Это законно и предсказуемо.</p>
+  <p>Переполнение <strong>знаковых</strong> — это <em>undefined behavior</em>. Компилятор вправе предполагать, что его не бывает, и выкидывать проверки. Формально <code>INT32_MAX + 2</code> не «даёт <code>INT32_MIN + 1</code>» — программа просто перестаёт иметь смысл, хотя на практике обычно печатает именно это.</p>
+  <p>Вот это различие — законное заворачивание против UB — и есть ответ на третий и четвёртый вопросы Task&nbsp;2.</p>
+</div>
+
+<h2 id="comma"><span class="num">9.</span>Операция «запятая»</h2>
+
+<p>Объединяет несколько выражений в одно. Вычисляет их слева направо, а возвращает результат <strong>последнего</strong>.</p>
+
+<pre><code>int x = 1, y = 2;
+
+int z = (++x, y--, x + y);
+<span class="cmt">// ++x   → x = 2</span>
+<span class="cmt">// y--   → вернул 2, затем y = 1</span>
+<span class="cmt">// x + y → 2 + 1 = 3, это и попадает в z</span>
+
+std::cout &lt;&lt; z;  <span class="cmt">// 3</span></code></pre>
+
+<p>Не путай с запятой-разделителем в объявлении <code>int a = 1, b = 2;</code> или в списке аргументов функции — там это не операция.</p>
+
+<h2 id="errata"><span class="num">10.</span>Что в исходном конспекте напутано</h2>
+
+<p>Файл <code>stepik.txt</code> копировался со страницы курса, и часть содержимого пострадала. Не заучивай оттуда следующее:</p>
+
+<ol>
+  <li><strong>Пропали все угловые скобки.</strong> В тексте стоит <code>#include</code> без ничего и <code>static_cast(expression)</code> без типа. Правильно — <code>#include &lt;iostream&gt;</code> и <code>static_cast&lt;double&gt;(x)</code>. Браузер съел то, что принял за HTML-теги.</li>
+  <li><strong>Противоречие про сдвиг вправо</strong> — в сводке нули, в подробном разборе знаковый бит. Верен знаковый бит для знаковых типов.</li>
+  <li><strong>Путаная нумерация битов.</strong> В разборе <code>x | y</code> написано, что у пятёрки единицы во «втором и четвёртом» битах. У 5 = <code>00000101</code> единицы в битах 0 и 2, если считать с нуля справа. Нумеруй с нуля и от младшего — так принято везде.</li>
+  <li><strong>Диапазоны вещественных</strong> напечатаны как «10-38» и «1038» — это потерянные степени, читай как 10<sup>&minus;38</sup> и 10<sup>38</sup>.</li>
+  <li><strong>Про <code>long</code>: «обычно 8 байт»</strong> — только на Linux и macOS, на Windows 4. Не полагайся, используй <code>&lt;cstdint&gt;</code>.</li>
+  <li><strong>Про <code>and</code>, <code>or</code>, <code>not</code>: «унаследованы из C»</strong> — не совсем. Это альтернативные токены самого C++; в C они появляются только через заголовок <code>&lt;iso646.h&gt;</code>. Что до «плохого стиля» — это вопрос принятого соглашения, а не правило языка, но в вашем курсе пиши <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>.</li>
+  <li><strong><code>using namespace std;</code></strong> — в примерах Степика он есть, но в реальном коде и в лабе так не делают: это тянет в область видимости сотни имён и приводит к конфликтам. Пиши <code>std::cout</code> явно.</li>
+</ol>
+
+<footer>
+  <p>Источник: <code>stepik.txt</code> из папки <code>C++ Programming</code>. Полный курс: <a href="https://stepik.org/course/180462/promo#toc" style="color:var(--accent)">stepik.org/course/180462</a> — бесплатный, от лектора вашего курса.</p>
+  <p>Ошибки исходного конспекта исправлены, привязка к заданиям лабораторной 01 добавлена.</p>
+</footer>
+
+</div>
+</body>
+</html>

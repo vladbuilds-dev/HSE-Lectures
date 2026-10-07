@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HSE DSBA — Лекции</title>
+<meta name="description" content="Лекции и семинары HSE DSBA, 1 курс">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23111'/><text x='16' y='22' font-family='monospace' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'>DS</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --fg:#1b1a18; --muted:#6f6b65; --faint:#a29d95;
+  --line:#e4e0d9; --hover:#efede8; --active:#1b1a18; --active-fg:#ffffff;
+  --accent:#c2410c; --accent-soft:#fbeee6; --code:#f3f1ed;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f0f10; --panel:#161617; --fg:#ecebe8; --muted:#9a968f; --faint:#66625c;
+    --line:#26262a; --hover:#1e1e21; --active:#ecebe8; --active-fg:#111;
+    --accent:#fb923c; --accent-soft:#2a1d14; --code:#1d1d20;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f0f10; --panel:#161617; --fg:#ecebe8; --muted:#9a968f; --faint:#66625c;
+  --line:#26262a; --hover:#1e1e21; --active:#ecebe8; --active-fg:#111;
+  --accent:#fb923c; --accent-soft:#2a1d14; --code:#1d1d20;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+
+.app{display:grid;grid-template-columns:300px 1fr;height:100dvh}
+
+/* ---------- sidebar ---------- */
+.side{display:flex;flex-direction:column;border-right:1px solid var(--line);background:var(--panel);min-height:0}
+.brand{padding:20px 20px 14px;display:flex;align-items:center;gap:10px}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--active);color:var(--active-fg);display:grid;place-items:center;font:700 12px/1 "JetBrains Mono",monospace}
+.brand b{display:block;font-size:15px;letter-spacing:-.01em}
+.brand small{color:var(--muted);font-size:12px}
+.tabs{margin:0 16px 12px;display:grid;grid-template-columns:1fr 1fr;background:var(--hover);border-radius:10px;padding:3px}
+.tabs button{border:0;background:none;padding:7px 0;border-radius:8px;font-weight:500;color:var(--muted);display:flex;gap:6px;justify-content:center;align-items:center}
+.tabs button.on{background:var(--panel);color:var(--fg);box-shadow:var(--shadow)}
+.tabs .n{font:500 11px "JetBrains Mono",monospace;color:var(--faint)}
+.search{margin:0 16px 10px;position:relative}
+.search input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:9px;padding:8px 10px 8px 32px;font:inherit;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.list{overflow:auto;flex:1;padding:4px 10px 20px}
+.group{margin-top:12px}
+.group h3{margin:0;padding:6px 10px;font:600 11px/1.3 Inter,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;gap:8px}
+.group h3 i{width:8px;height:8px;border-radius:2px;flex:none}
+.item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px}
+.item:hover{background:var(--hover)}
+.item.on{background:var(--active);color:var(--active-fg)}
+.item.on .meta{color:inherit;opacity:.65}
+.item .num{font:500 11px "JetBrains Mono",monospace;color:var(--faint);width:20px;flex:none}
+.item.on .num{color:inherit;opacity:.6}
+.item .t{flex:1;min-width:0}
+.item .t span{display:block;line-height:1.35}
+.item .t .meta{margin-top:2px}
+.item .meta{font-size:11.5px;color:var(--muted)}
+.item .ext{font:500 10px "JetBrains Mono",monospace;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 4px}
+.item.on .ext{border-color:currentColor;color:inherit;opacity:.6}
+.empty{padding:20px 10px;color:var(--muted)}
+.foot{border-top:1px solid var(--line);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;color:var(--faint);font-size:12px}
+.foot kbd{font:500 11px "JetBrains Mono",monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;color:var(--muted)}
+.iconbtn{border:1px solid var(--line);background:var(--panel);border-radius:8px;width:32px;height:32px;display:grid;place-items:center;color:var(--muted);flex:none}
+.iconbtn:hover{color:var(--fg);background:var(--hover)}
+.iconbtn:disabled{opacity:.35;cursor:default}
+
+/* ---------- main ---------- */
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.bar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+.bar .menu{display:none}
+.crumb{flex:1;min-width:0}
+.crumb small{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12px}
+.crumb small i{width:7px;height:7px;border-radius:2px}
+.crumb h1{margin:1px 0 0;font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav{display:flex;gap:6px;align-items:center}
+.pos{font:500 12px "JetBrains Mono",monospace;color:var(--muted);padding:0 6px}
+.linkbtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--line);border-radius:8px;text-decoration:none;font-weight:500;font-size:13px;background:var(--panel)}
+.linkbtn:hover{background:var(--hover)}
+.stage{flex:1;min-height:0;position:relative;background:var(--bg)}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.doc{position:absolute;inset:0;overflow:auto}
+.md{max-width:800px;margin:0 auto;padding:40px 28px 80px;font-size:15.5px;line-height:1.7}
+.md h1{font-size:28px;line-height:1.25;letter-spacing:-.02em;margin:0 0 24px}
+.md h2{font-size:21px;margin:40px 0 12px;padding-top:12px;border-top:1px solid var(--line);letter-spacing:-.01em}
+.md h3{font-size:17px;margin:28px 0 8px}
+.md code{font:13.5px "JetBrains Mono",monospace;background:var(--code);padding:.1em .35em;border-radius:4px}
+.md pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto;line-height:1.55}
+.md pre code{background:none;padding:0;font-size:13px}
+.md pre code.hljs{background:none;padding:0}
+.md table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow:auto}
+.md th,.md td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.md th{background:var(--hover)}
+.md blockquote{margin:16px 0;padding:4px 16px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+.md img{max-width:100%}
+.md hr{border:0;border-top:1px solid var(--line);margin:32px 0}
+.md .katex-display{overflow-x:auto;overflow-y:hidden}
+.notice{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted)}
+.notice b{display:block;color:var(--fg);font-size:16px;margin-bottom:6px}
+.notice .linkbtn{margin-top:14px;color:var(--fg)}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--faint);font:500 12px "JetBrains Mono",monospace}
+
+.scrim{display:none}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;inset:0 auto 0 0;width:min(320px,88vw);z-index:20;transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+  .app.open .side{transform:none}
+  .app.open .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10}
+  .bar{padding:10px 12px;gap:8px}
+  .bar .menu{display:grid}
+  .pos,.hide-sm{display:none}
+  .md{padding:28px 16px 60px;font-size:15px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">DS</div>
+      <div><b>HSE DSBA · 1 курс</b><small>Лекции и семинары</small></div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button data-kind="lectures" role="tab">Лекции <span class="n" id="n-lectures"></span></button>
+      <button data-kind="seminars" role="tab">Семинары <span class="n" id="n-seminars"></span></button>
+    </div>
+    <label class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Поиск по названию…" autocomplete="off">
+    </label>
+    <nav class="list" id="list"></nav>
+    <div class="foot">
+      <span><kbd>←</kbd> <kbd>→</kbd> переключение</span>
+      <button class="iconbtn" id="theme" title="Тема" aria-label="Сменить тему">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <main class="main">
+    <header class="bar">
+      <button class="iconbtn menu" id="menu" aria-label="Меню">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="crumb">
+        <small id="c-subj"></small>
+        <h1 id="c-title"></h1>
+      </div>
+      <div class="nav">
+        <button class="iconbtn" id="prev" title="Предыдущая (←)" aria-label="Предыдущая">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <span class="pos" id="pos"></span>
+        <button class="iconbtn" id="next" title="Следующая (→)" aria-label="Следующая">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+        <a class="linkbtn hide-sm" id="open" target="_blank" rel="noopener">Открыть
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
+        </a>
+        <a class="iconbtn" id="dl" download title="Скачать" aria-label="Скачать">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+        </a>
+      </div>
+    </header>
+    <section class="stage" id="stage"></section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+const SUBJECTS = {
+  "calculus":        { name: "Calculus",                    color: "#2563eb" },
+  "linear-algebra":  { name: "Linear Algebra & Geometry",   color: "#7c3aed" },
+  "discrete-math":   { name: "Discrete Math",               color: "#059669" },
+  "cpp":             { name: "C++ Programming",             color: "#c2410c" },
+  "russian-history": { name: "Russian History",             color: "#be123c" },
+};
+
+const DATA = {
+  lectures: [
+    { s: "calculus", file: "lecture-01.pdf", title: "Lecture 1 — Bounded sets. Real numbers", meta: "07.09" },
+    { s: "calculus", file: "lecture-02.pdf", title: "Lecture 2 — Sequences. Infinitesimals", meta: "14.09" },
+    { s: "calculus", file: "lecture-03.pdf", title: "Lecture 3 — Convergent sequences. Weierstrass", meta: "21.09" },
+    { s: "calculus", file: "lecture-04.pdf", title: "Lecture 4 — Number e. Cantor, Bolzano–Weierstrass", meta: "28.09" },
+
+    { s: "linear-algebra", file: "lecture-01.pdf", title: "Lecture 1 — Matrices. Addition & multiplication", meta: "6 стр." },
+    { s: "linear-algebra", file: "lecture-02.pdf", title: "Lecture 2 — Matrix transposition", meta: "3 стр." },
+    { s: "linear-algebra", file: "lecture-03.pdf", title: "Lecture 3 — Elementary row operations", meta: "8 стр." },
+    { s: "linear-algebra", file: "lecture-04.pdf", title: "Lecture 4 — Systems of linear equations", meta: "4 стр." },
+    { s: "linear-algebra", file: "lecture-05.pdf", title: "Lecture 5 — Permutations", meta: "6 стр." },
+    { s: "linear-algebra", file: "lecture-05-ru.html", title: "Лекция 5 — Перестановки (перевод)", meta: "конспект на русском" },
+    { s: "linear-algebra", file: "permutations.pdf", title: "Подстановки — разбор с примерами", meta: "доп. материал" },
+    { s: "linear-algebra", file: "lecture-06.pdf", title: "Lecture 6 — Determinants", meta: "5 стр." },
+
+    { s: "discrete-math", file: "lecture-notes.pdf", title: "Элементы дискретной математики", meta: "Е. В. Дашков · 140 стр." },
+
+    { s: "cpp", file: "cpp-notes.pdf", title: "C++ Notes — конспект лекций", meta: "М. Горденко · 64 стр." },
+    { s: "cpp", file: "review-types-operations.html", title: "Повторение: типы данных и операции", meta: "конспект" },
+  ],
+  seminars: [
+    { s: "calculus", file: "seminar-02-tasks.pdf", title: "Seminar 2 — Limits of sequences", meta: "задачи" },
+    { s: "calculus", file: "seminar-02-notes.pdf", title: "Seminar 2 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-03-tasks.pdf", title: "Seminar 3 — Limits: computations", meta: "задачи" },
+    { s: "calculus", file: "seminar-03-notes.pdf", title: "Seminar 3 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-04-tasks.pdf", title: "Seminar 4 — Limits of sequences", meta: "задачи" },
+    { s: "calculus", file: "seminar-04-notes.pdf", title: "Seminar 4 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-05-tasks.pdf", title: "Seminar 5 — Limits of functions", meta: "задачи" },
+    { s: "calculus", file: "seminar-05-notes.pdf", title: "Seminar 5 — записи", meta: "решения" },
+    { s: "calculus", file: "seminar-06-tasks.pdf", title: "Seminar 6 — First remarkable limit", meta: "задачи" },
+    { s: "calculus", file: "seminar-06-notes.pdf", title: "Seminar 6 — записи", meta: "решения" },
+
+    { s: "cpp", file: "seminar-01.md", title: "Seminar 1 — From source code to a running program", meta: "" },
+    { s: "cpp", file: "seminar-02.md", title: "Seminar 2 — How C++ stores numbers", meta: "" },
+    { s: "cpp", file: "lab-01-workbook.md", title: "Lab 1 — From bits to benchmarks", meta: "workbook" },
+
+    { s: "russian-history", file: "seminar-01.pptx", title: "Seminar 1 — презентация", meta: "8 сентября" },
+    { s: "russian-history", file: "seminar-01-prep.md", title: "Seminar 1 — подготовка", meta: "8 сентября" },
+  ],
+};
+for (const kind in DATA) DATA[kind].forEach(it => {
+  it.kind = kind;
+  it.path = `${kind}/${it.s}/${it.file}`;
+  it.id = `${kind}/${it.s}/${it.file.replace(/\.[^.]+$/, "")}`;
+  it.ext = it.file.split(".").pop();
+});
+
+const $ = s => document.querySelector(s);
+const app = $("#app"), list = $("#list"), stage = $("#stage"), q = $("#q");
+let kind = "lectures", current = null;
+const last = {};
+
+function store(k, v) { try { v === undefined ? null : localStorage.setItem(k, v); return localStorage.getItem(k); } catch { return null; } }
+
+function visible() {
+  const term = q.value.trim().toLowerCase();
+  return DATA[kind].filter(it => !term || (it.title + " " + SUBJECTS[it.s].name + " " + it.meta).toLowerCase().includes(term));
+}
+
+function renderList() {
+  document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.kind === kind));
+  const items = visible();
+  if (!items.length) { list.innerHTML = `<div class="empty">Ничего не найдено</div>`; return; }
+  const groups = {};
+  items.forEach(it => (groups[it.s] ||= []).push(it));
+  list.innerHTML = Object.entries(groups).map(([s, arr]) => `
+    <div class="group">
+      <h3><i style="background:${SUBJECTS[s].color}"></i>${SUBJECTS[s].name}</h3>
+      ${arr.map((it, i) => `
+        <button class="item${current && current.id === it.id ? " on" : ""}" data-id="${it.id}">
+          <span class="num">${String(i + 1).padStart(2, "0")}</span>
+          <span class="t"><span>${it.title}</span>${it.meta ? `<span class="meta">${it.meta}</span>` : ""}</span>
+          <span class="ext">${it.ext}</span>
+        </button>`).join("")}
+    </div>`).join("");
+  const on = list.querySelector(".item.on");
+  if (on) on.scrollIntoView({ block: "nearest" });
+}
+
+function setKind(k) {
+  kind = k;
+  renderList();
+}
+
+function show(it, push = true) {
+  current = it;
+  last[it.kind] = it.id;
+  if (kind !== it.kind) kind = it.kind;
+  renderList();
+  const subj = SUBJECTS[it.s];
+  $("#c-subj").innerHTML = `<i style="background:${subj.color}"></i>${subj.name} · ${it.kind === "lectures" ? "Лекции" : "Семинары"}`;
+  $("#c-title").textContent = it.title;
+  document.title = `${it.title} — HSE DSBA`;
+  const arr = DATA[it.kind], i = arr.indexOf(it);
+  $("#pos").textContent = `${i + 1} / ${arr.length}`;
+  $("#prev").disabled = i === 0;
+  $("#next").disabled = i === arr.length - 1;
+  $("#open").href = it.path;
+  $("#dl").href = it.path;
+  if (push) history.replaceState(null, "", "#" + it.id);
+  store("hse:last", it.id);
+  app.classList.remove("open");
+  renderStage(it);
+}
+
+async function renderStage(it) {
+  stage.innerHTML = `<div class="loading">загрузка…</div>`;
+  if (it.ext === "pdf") {
+    stage.innerHTML = `<iframe src="${it.path}#view=FitH" title="${it.title}"></iframe>`;
+  } else if (it.ext === "html") {
+    stage.innerHTML = `<iframe src="${it.path}" title="${it.title}"></iframe>`;
+  } else if (it.ext === "pptx") {
+    const abs = new URL(it.path, location.href).href;
+    if (/^(localhost|127\.|\[::1\])/.test(location.hostname) || location.protocol === "file:") {
+      stage.innerHTML = `<div class="notice"><div><b>Презентация PowerPoint</b>Просмотр в браузере работает на опубликованном сайте.<br>Локально — скачай файл.<br><a class="linkbtn" href="${it.path}" download>Скачать .pptx</a></div></div>`;
+    } else {
+      stage.innerHTML = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(abs)}" title="${it.title}"></iframe>`;
+    }
+  } else if (it.ext === "md") {
+    try {
+      const res = await fetch(it.path);
+      const text = await res.text();
+      if (current !== it) return;
+      stage.innerHTML = `<div class="doc"><article class="md">${renderMarkdown(text)}</article></div>`;
+      stage.querySelectorAll("pre code").forEach(el => window.hljs && hljs.highlightElement(el));
+    } catch {
+      stage.innerHTML = `<div class="notice"><div><b>Не удалось загрузить файл</b><a class="linkbtn" href="${it.path}" target="_blank">Открыть напрямую</a></div></div>`;
+    }
+  }
+}
+
+// Markdown + формулы: вырезаем $…$ до marked, чтобы он не трогал _ и *
+function renderMarkdown(src) {
+  const math = [];
+  const keep = (tex, display) => { math.push({ tex, display }); return `@@MATH${math.length - 1}@@`; };
+  const parts = src.split(/(```[\s\S]*?```|`[^`\n]*`)/g);
+  src = parts.map((p, i) => i % 2 ? p : p
+    .replace(/\$\$([\s\S]+?)\$\$/g, (_, t) => keep(t, true))
+    .replace(/\$([^$\n]+?)\$/g, (_, t) => keep(t, false))).join("");
+  let html = marked.parse(src, { gfm: true });
+  return html.replace(/@@MATH(\d+)@@/g, (_, n) => {
+    const { tex, display } = math[n];
+    try { return katex.renderToString(tex, { displayMode: display, throwOnError: false }); }
+    catch { return tex; }
+  });
+}
+
+function step(d) {
+  if (!current) return;
+  const arr = DATA[current.kind], i = arr.indexOf(current) + d;
+  if (arr[i]) show(arr[i]);
+}
+
+function fromHash() {
+  const id = decodeURIComponent(location.hash.slice(1)) || store("hse:last");
+  const all = [...DATA.lectures, ...DATA.seminars];
+  return all.find(it => it.id === id) || DATA.lectures[0];
+}
+
+// events
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  const k = b.dataset.kind;
+  if (k === kind) return;
+  setKind(k);
+  const target = DATA[k].find(it => it.id === last[k]) || DATA[k][0];
+  show(target);
+});
+list.onclick = e => {
+  const b = e.target.closest(".item");
+  if (b) show([...DATA.lectures, ...DATA.seminars].find(it => it.id === b.dataset.id));
+};
+q.oninput = renderList;
+$("#prev").onclick = () => step(-1);
+$("#next").onclick = () => step(1);
+$("#menu").onclick = () => app.classList.add("open");
+$("#scrim").onclick = () => app.classList.remove("open");
+window.addEventListener("hashchange", () => { const it = fromHash(); if (it !== current) show(it, false); });
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "ArrowLeft") step(-1);
+  if (e.key === "ArrowRight") step(1);
+  if (e.key === "/") { e.preventDefault(); q.focus(); }
+});
+
+// theme
+function applyTheme(t) { t ? document.documentElement.dataset.theme = t : delete document.documentElement.dataset.theme; }
+applyTheme(store("hse:theme") || null);
+$("#theme").onclick = () => {
+  const cur = document.documentElement.dataset.theme || null;
+  const dark = cur ? cur === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const nextT = dark ? "light" : "dark";
+  applyTheme(nextT); store("hse:theme", nextT);
+};
+
+$("#n-lectures").textContent = DATA.lectures.length;
+$("#n-seminars").textContent = DATA.seminars.length;
+show(fromHash());
+</script>
+</body>
+</html>
