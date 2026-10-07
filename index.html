@@ -66,12 +66,10 @@ svg{flex:none}
 .round:hover{background:var(--fill2);color:var(--fg)}
 
 /* ---------- hero ---------- */
-.hero{text-align:center;padding:88px 0 56px}
-.eyebrow{font-size:17px;font-weight:600;color:var(--fg2);margin:0 0 10px;letter-spacing:-.02em}
-.hero h1{font-size:clamp(44px,7.4vw,80px);line-height:1.04;letter-spacing:-.045em;font-weight:700;margin:0}
+.hero{text-align:center;padding:48px 0 28px}
+.eyebrow{font-size:15px;font-weight:500;color:var(--fg2);margin:0;letter-spacing:-.01em}
 .grad{background:linear-gradient(90deg,#0a84ff 0%,#5e5ce6 35%,#bf5af2 65%,#ff375f 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{max-width:560px;margin:20px auto 0;font-size:21px;line-height:1.38;color:var(--fg2);letter-spacing:-.02em}
-.resume{margin-top:30px;display:inline-flex;align-items:center;gap:10px;border:0;background:var(--blue);color:#fff;border-radius:980px;padding:11px 20px 11px 22px;font-size:17px;max-width:100%}
+.resume{margin-top:18px;display:inline-flex;align-items:center;gap:10px;border:0;background:var(--blue);color:#fff;border-radius:980px;padding:11px 20px 11px 22px;font-size:17px;max-width:100%}
 .resume:hover{filter:brightness(1.08)}
 .resume span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .resume small{opacity:.75;font-size:15px}
@@ -209,8 +207,7 @@ body.viewing{overflow:hidden}
   .tile{min-height:220px;padding:28px}
   .tile .num{font-size:72px}
   .tile h2{font-size:32px}
-  .hero{padding:64px 0 40px}
-  .hero p{font-size:19px}
+  .hero{padding:32px 0 22px}
   .library{padding-top:56px}
   .libhead h2{font-size:32px}
   .gnav nav{display:none}
@@ -250,8 +247,6 @@ body.viewing{overflow:hidden}
 <main class="wrap">
   <section class="hero">
     <p class="eyebrow">Data Science and Business Analytics · 1 курс</p>
-    <h1>Все лекции.<br><span class="grad">В одном месте.</span></h1>
-    <p id="hero-sub"></p>
     <div id="resume-slot"></div>
   </section>
 
@@ -421,8 +416,6 @@ const lastOf = {};
 const subjectsOf = kind => [...new Set(DATA[kind].map(it => it.s))];
 
 function renderStatic() {
-  const nSubj = Object.keys(SUBJECTS).length;
-  $("#hero-sub").textContent = `${count(DATA.lectures.length, "lectures")} и ${DATA.seminars.length} материалов с семинаров по ${nSubj} предметам. Выбери раздел — и сразу к делу.`;
   for (const k of ["lectures", "seminars"]) {
     $("#t-" + k).textContent = DATA[k].length;
     $("#c-" + k).textContent = DATA[k].length;
